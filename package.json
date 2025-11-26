@@ -1,0 +1,23 @@
+{
+  "name": "e-commerce-store",
+  "version": "1.0.0",
+  "description": "E-commerce store with cart and checkout functionality",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest"
+  },
+  "keywords": ["ecommerce", "cart", "checkout"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.0.1",
+    "supertest": "^6.3.3"
+  }
+}
+
