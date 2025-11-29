@@ -30,11 +30,20 @@ function Header() {
   );
 }
 
+function generateUniqueUserId() {
+  const timestamp = Date.now();
+  const random1 = Math.random().toString(36).substr(2, 9);
+  const random2 = Math.random().toString(36).substr(2, 9);
+  const performance = typeof window !== 'undefined' && window.performance ? window.performance.now() : Math.random() * 1000;
+  
+  return `user${timestamp}_${random1}_${Math.floor(performance)}_${random2}`;
+}
+
 function getOrCreateUserId() {
   try {
     let userId = localStorage.getItem('ecommerce_userId');
     if (!userId) {
-      userId = `user${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      userId = generateUniqueUserId();
       try {
         localStorage.setItem('ecommerce_userId', userId);
       } catch (storageError) {
@@ -44,7 +53,7 @@ function getOrCreateUserId() {
     return userId;
   } catch (error) {
     console.warn('localStorage not available, using session-based userId:', error);
-    return `user${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return generateUniqueUserId();
   }
 }
 
