@@ -31,12 +31,21 @@ function Header() {
 }
 
 function getOrCreateUserId() {
-  let userId = localStorage.getItem('ecommerce_userId');
-  if (!userId) {
-    userId = `user${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    localStorage.setItem('ecommerce_userId', userId);
+  try {
+    let userId = localStorage.getItem('ecommerce_userId');
+    if (!userId) {
+      userId = `user${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      try {
+        localStorage.setItem('ecommerce_userId', userId);
+      } catch (storageError) {
+        console.warn('Failed to save userId to localStorage:', storageError);
+      }
+    }
+    return userId;
+  } catch (error) {
+    console.warn('localStorage not available, using session-based userId:', error);
+    return `user${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   }
-  return userId;
 }
 
 function App() {
