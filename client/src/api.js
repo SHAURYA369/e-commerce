@@ -1,5 +1,20 @@
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3000/api';
 
+async function handleResponse(response) {
+  const contentType = response.headers.get('content-type');
+  if (!contentType || !contentType.includes('application/json')) {
+    const text = await response.text();
+    throw new Error(`API returned non-JSON response. Check if API URL is correct. URL: ${response.url}`);
+  }
+  
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || `Request failed with status ${response.status}`);
+  }
+  
+  return response.json();
+}
+
 export const cartAPI = {
   addItem: async (userId, productId, quantity, price) => {
     const response = await fetch(`${API_BASE_URL}/cart/items`, {
@@ -7,20 +22,12 @@ export const cartAPI = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, productId, quantity, price }),
     });
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to add item');
-    }
-    return response.json();
+    return handleResponse(response);
   },
 
   getCart: async (userId) => {
     const response = await fetch(`${API_BASE_URL}/cart?userId=${userId}`);
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to fetch cart');
-    }
-    return response.json();
+    return handleResponse(response);
   },
 };
 
@@ -31,22 +38,14 @@ export const checkoutAPI = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, discountCode }),
     });
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Checkout failed');
-    }
-    return response.json();
+    return handleResponse(response);
   },
 };
 
 export const discountAPI = {
   getAvailable: async () => {
     const response = await fetch(`${API_BASE_URL}/discount/available`);
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to fetch discount code');
-    }
-    return response.json();
+    return handleResponse(response);
   },
 };
 
@@ -55,22 +54,14 @@ export const adminAPI = {
     const response = await fetch(`${API_BASE_URL}/admin/statistics`, {
       headers: { 'x-api-key': apiKey },
     });
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to fetch statistics');
-    }
-    return response.json();
+    return handleResponse(response);
   },
 
   getNthOrder: async (apiKey) => {
     const response = await fetch(`${API_BASE_URL}/admin/nth-order`, {
       headers: { 'x-api-key': apiKey },
     });
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to fetch nth order');
-    }
-    return response.json();
+    return handleResponse(response);
   },
 
   updateNthOrder: async (apiKey, nthOrder) => {
@@ -82,11 +73,7 @@ export const adminAPI = {
       },
       body: JSON.stringify({ nthOrder }),
     });
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to update nth order');
-    }
-    return response.json();
+    return handleResponse(response);
   },
 
   generateDiscountCode: async (apiKey) => {
@@ -94,11 +81,7 @@ export const adminAPI = {
       method: 'POST',
       headers: { 'x-api-key': apiKey },
     });
-    if (!response.ok) {
-      const error = await response.json();
-      throw new Error(error.error || 'Failed to generate discount code');
-    }
-    return response.json();
+    return handleResponse(response);
   },
 };
 

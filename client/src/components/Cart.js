@@ -20,7 +20,12 @@ function Cart({ userId }) {
       setCart(data);
     } catch (error) {
       console.error('Error loading cart:', error);
-      setMessage('Error loading cart: ' + (error.message || 'Unknown error'));
+      const errorMsg = error.message || 'Unknown error';
+      if (errorMsg.includes('API returned non-JSON')) {
+        setMessage('API connection error. Please check if backend is running and REACT_APP_API_URL is set correctly.');
+      } else {
+        setMessage('Error loading cart: ' + errorMsg);
+      }
     }
   };
 
