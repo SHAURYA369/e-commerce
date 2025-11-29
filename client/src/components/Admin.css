@@ -226,3 +226,112 @@
   cursor: not-allowed;
 }
 
+.active-discount-section {
+  background: #e7f3ff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  border: 2px solid #2196F3;
+}
+
+.active-discount-section h3 {
+  margin-bottom: 15px;
+  color: #1976D2;
+}
+
+.active-code-display {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.code-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.code-label {
+  font-weight: 600;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.code-value {
+  font-family: monospace;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #1976D2;
+  background: #f5f5f5;
+  padding: 15px;
+  border-radius: 4px;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+.code-info {
+  color: #666;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.no-active-code {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.no-active-code p {
+  margin-bottom: 10px;
+  color: #666;
+}
+
+.info-text {
+  font-size: 0.9rem;
+  color: #999;
+  font-style: italic;
+}
+
+.discount-management-section {
+  background: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.discount-management-section h3 {
+  margin-bottom: 15px;
+  color: #282c34;
+}
+
+.generate-code-btn {
+  padding: 12px 24px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background-color 0.3s;
+  margin-bottom: 10px;
+}
+
+.generate-code-btn:hover:not(:disabled) {
+  background-color: #218838;
+}
+
+.generate-code-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.help-text {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+  font-style: italic;
+}
+

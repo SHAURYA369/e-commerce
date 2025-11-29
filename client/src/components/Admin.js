@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { adminAPI } from '../api';
+import { adminAPI, discountAPI } from '../api';
 import './Admin.css';
 
 function Admin() {
@@ -7,21 +7,32 @@ function Admin() {
   const [statistics, setStatistics] = useState(null);
   const [nthOrder, setNthOrder] = useState(5);
   const [newNthOrder, setNewNthOrder] = useState('');
+  const [activeDiscountCode, setActiveDiscountCode] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [generatingCode, setGeneratingCode] = useState(false);
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    loadData();
+    if (apiKey) {
+      loadData();
+    }
   }, [apiKey]);
 
   const loadData = async () => {
     try {
-      const [stats, nth] = await Promise.all([
-        adminAPI.getStatistics(apiKey),
-        adminAPI.getNthOrder(apiKey),
+      const [stats, nth, discount] = await Promise.all([
+        adminAPI.getStatistics(apiKey).catch(() => null),
+        adminAPI.getNthOrder(apiKey).catch(() => null),
+        discountAPI.getAvailable().catch(() => ({ code: null })),
       ]);
-      setStatistics(stats);
-      setNthOrder(nth.nthOrder);
+      if (stats) setStatistics(stats);
+      if (nth) setNthOrder(nth.nthOrder);
+      if (discount && discount.code) {
+        setActiveDiscountCode(discount.code);
+      } else {
+        setActiveDiscountCode(null);
+      }
+      setMessage('');
     } catch (error) {
       setMessage('Error loading data. Check your API key.');
     }
@@ -45,6 +56,21 @@ function Admin() {
     }
   };
 
+  const handleGenerateDiscountCode = async () => {
+    setGeneratingCode(true);
+    setMessage('');
+
+    try {
+      const result = await adminAPI.generateDiscountCode(apiKey);
+      setMessage(`Discount code generated: ${result.code}`);
+      await loadData();
+    } catch (error) {
+      setMessage(error.message || 'Error generating discount code');
+    } finally {
+      setGeneratingCode(false);
+    }
+  };
+
   return (
     <div className="Admin">
       <h2>Admin Panel</h2>
@@ -61,6 +87,36 @@ function Admin() {
       </div>
 
       {message && <div className={`message ${message.includes('Error') ? 'error' : 'success'}`}>{message}</div>}
+
+      <div className="active-discount-section">
+        <h3>Active Discount Code</h3>
+        {activeDiscountCode ? (
+          <div className="active-code-display">
+            <div className="code-box">
+              <span className="code-label">Current Active Code:</span>
+              <span className="code-value">{activeDiscountCode}</span>
+            </div>
+            <p className="code-info">This code is available for users to use. It provides 10% discount.</p>
+          </div>
+        ) : (
+          <div className="no-active-code">
+            <p>No active discount code available.</p>
+            <p className="info-text">Discount codes are automatically generated every {nthOrder} orders, or you can generate one manually below.</p>
+          </div>
+        )}
+      </div>
+
+      <div className="discount-management-section">
+        <h3>Discount Code Management</h3>
+        <button 
+          onClick={handleGenerateDiscountCode} 
+          disabled={generatingCode || !apiKey}
+          className="generate-code-btn"
+        >
+          {generatingCode ? 'Generating...' : 'Generate Discount Code'}
+        </button>
+        <p className="help-text">Note: Can only generate if nth order condition is met and no code exists</p>
+      </div>
 
       {statistics && (
         <div className="statistics-section">

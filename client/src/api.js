@@ -55,6 +55,10 @@ export const adminAPI = {
     const response = await fetch(`${API_BASE_URL}/admin/statistics`, {
       headers: { 'x-api-key': apiKey },
     });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to fetch statistics');
+    }
     return response.json();
   },
 
@@ -62,6 +66,10 @@ export const adminAPI = {
     const response = await fetch(`${API_BASE_URL}/admin/nth-order`, {
       headers: { 'x-api-key': apiKey },
     });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to fetch nth order');
+    }
     return response.json();
   },
 
@@ -74,6 +82,22 @@ export const adminAPI = {
       },
       body: JSON.stringify({ nthOrder }),
     });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to update nth order');
+    }
+    return response.json();
+  },
+
+  generateDiscountCode: async (apiKey) => {
+    const response = await fetch(`${API_BASE_URL}/admin/discount/generate`, {
+      method: 'POST',
+      headers: { 'x-api-key': apiKey },
+    });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to generate discount code');
+    }
     return response.json();
   },
 };
