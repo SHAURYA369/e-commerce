@@ -149,10 +149,11 @@ Response:
 
 ## Discount Code Rules
 
-- Discount codes are generated automatically every nth order (default: 5)
+- Discount codes are automatically generated when every nth order is placed (default: every 5th order - 5th, 10th, 15th, etc.)
 - Each discount code provides 10% off the entire order
 - A discount code can only be used once
-- After a code is used, a new one becomes available on the next nth order
+- Only one discount code is available at a time
+- After a code is used, the next code becomes available automatically on the next nth order
 - Discount applies to the entire order total
 
 ## Testing
