@@ -25,10 +25,15 @@ class Store {
   addOrder(order) {
     this.orders.push(order);
     this.orderCount++;
+    return this.orderCount;
   }
 
   addDiscountCode(code) {
     this.discountCodes.push(code);
+  }
+
+  shouldGenerateAndMark() {
+    return this.orderCount % this.nthOrder === 0 && this.orderCount > 0;
   }
 
   findDiscountCode(code) {

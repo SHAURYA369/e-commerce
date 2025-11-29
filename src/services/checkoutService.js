@@ -39,9 +39,9 @@ class CheckoutService {
       discountAmount
     );
 
-    store.addOrder(order);
+    const newOrderCount = store.addOrder(order);
     
-    if (store.shouldGenerateDiscountCode() && !store.getAvailableDiscountCode()) {
+    if (store.shouldGenerateAndMark()) {
       discountService.generateDiscountCodeAutomatically();
     }
     

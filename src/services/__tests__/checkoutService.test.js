@@ -76,18 +76,20 @@ describe('CheckoutService', () => {
     expect(store.discountCodes[0].status).toBe('AVAILABLE');
   });
 
-  test('should not generate duplicate code if one already exists', () => {
+  test('should generate new code on every nth order', () => {
     for (let i = 0; i < 5; i++) {
       cartService.addItemToCart(`user${i}`, 'product1', 1, 10.00);
       checkoutService.checkout(`user${i}`);
     }
     
-    const codeCount = store.discountCodes.length;
+    expect(store.discountCodes.length).toBe(1);
     
-    cartService.addItemToCart('user5', 'product1', 1, 10.00);
-    checkoutService.checkout('user5');
+    for (let i = 5; i < 10; i++) {
+      cartService.addItemToCart(`user${i}`, 'product1', 1, 10.00);
+      checkoutService.checkout(`user${i}`);
+    }
     
-    expect(store.discountCodes.length).toBe(codeCount);
+    expect(store.discountCodes.length).toBe(2);
   });
 });
 
