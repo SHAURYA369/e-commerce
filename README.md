@@ -216,6 +216,34 @@ The load test simulates 1000 orders and verifies:
 - Correct discount code generation (200 codes for 1000 orders)
 - Throughput metrics
 
+## UI
+
+A React-based UI is available for testing the e-commerce functionality.
+
+### Running the UI
+
+1. Start the backend server:
+```bash
+npm start
+```
+
+2. In a new terminal, start the React app:
+```bash
+npm run client
+```
+
+The UI will open at `http://localhost:3000` (React default port, backend runs on port 3000 by default - you may need to change React port if there's a conflict).
+
+### UI Features
+
+- **Cart Tab**: Add items to cart, view cart contents and total
+- **Checkout Tab**: Place orders with optional discount codes
+- **Admin Tab**: View statistics, manage discount codes, and configure nth order value
+
+### Note
+
+If there's a port conflict, you can change the React dev server port by setting `PORT=3001` in the client directory or modifying `client/package.json`.
+
 ## Project Structure
 
 ```
