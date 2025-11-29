@@ -30,8 +30,17 @@ function Header() {
   );
 }
 
+function getOrCreateUserId() {
+  let userId = localStorage.getItem('ecommerce_userId');
+  if (!userId) {
+    userId = `user${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    localStorage.setItem('ecommerce_userId', userId);
+  }
+  return userId;
+}
+
 function App() {
-  const [userId] = useState(`user${Date.now()}`);
+  const [userId] = useState(getOrCreateUserId());
 
   return (
     <Router>
