@@ -158,10 +158,21 @@ Response:
 
 ## Testing
 
-Run tests:
+Run unit tests:
 ```bash
 npm test
 ```
+
+Run load test (requires server to be running):
+```bash
+npm start  # In one terminal
+npm run load-test  # In another terminal
+```
+
+The load test simulates 1000 orders and verifies:
+- System scalability and performance
+- Correct discount code generation (200 codes for 1000 orders)
+- Throughput metrics
 
 ## Project Structure
 
