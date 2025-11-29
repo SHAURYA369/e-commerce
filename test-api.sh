@@ -1,6 +1,7 @@
 #!/bin/bash
 
 BASE_URL="http://localhost:3000"
+ADMIN_API_KEY="admin-secret-key-12345"
 
 echo "=========================================="
 echo "E-Commerce API Testing with cURL"
@@ -69,7 +70,7 @@ echo ""
 
 echo "8. Checking admin statistics (should show 1 discount code)"
 echo "----------------------"
-STATS=$(curl -s -X GET "$BASE_URL/api/admin/statistics")
+STATS=$(curl -s -X GET "$BASE_URL/api/admin/statistics" -H "x-api-key: $ADMIN_API_KEY")
 echo "$STATS" | jq .
 DISCOUNT_CODE=$(echo "$STATS" | jq -r '.discountCodes[0].code')
 echo ""
@@ -128,11 +129,44 @@ echo ""
 
 echo "14. Final admin statistics"
 echo "----------------------"
+curl -s -X GET "$BASE_URL/api/admin/statistics" -H "x-api-key: $ADMIN_API_KEY" | jq .
+echo ""
+echo ""
+
+echo "15. Get current nth order value"
+echo "----------------------"
+curl -s -X GET "$BASE_URL/api/admin/nth-order" -H "x-api-key: $ADMIN_API_KEY" | jq .
+echo ""
+echo ""
+
+echo "16. Update nth order to 10"
+echo "----------------------"
+curl -s -X PUT "$BASE_URL/api/admin/nth-order" \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: $ADMIN_API_KEY" \
+  -d '{"nthOrder": 10}' | jq .
+echo ""
+echo ""
+
+echo "17. Verify nth order updated"
+echo "----------------------"
+curl -s -X GET "$BASE_URL/api/admin/nth-order" -H "x-api-key: $ADMIN_API_KEY" | jq .
+echo ""
+echo ""
+
+echo "18. Test admin API without auth (should fail)"
+echo "----------------------"
 curl -s -X GET "$BASE_URL/api/admin/statistics" | jq .
 echo ""
 echo ""
 
-echo "15. Testing invalid discount code"
+echo "19. Test admin API with wrong key (should fail)"
+echo "----------------------"
+curl -s -X GET "$BASE_URL/api/admin/statistics" -H "x-api-key: wrong-key" | jq .
+echo ""
+echo ""
+
+echo "20. Testing invalid discount code"
 echo "----------------------"
 curl -s -X POST "$BASE_URL/api/cart/items" \
   -H "Content-Type: application/json" \
@@ -143,7 +177,7 @@ curl -s -X POST "$BASE_URL/api/checkout" \
 echo ""
 echo ""
 
-echo "16. Testing empty cart checkout (should fail)"
+echo "21. Testing empty cart checkout (should fail)"
 echo "----------------------"
 curl -s -X POST "$BASE_URL/api/checkout" \
   -H "Content-Type: application/json" \

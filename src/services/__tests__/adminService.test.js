@@ -8,6 +8,7 @@ beforeEach(() => {
   store.orders = [];
   store.orderCount = 0;
   store.discountCodes = [];
+  store.nthOrder = 5;
 });
 
 describe('AdminService', () => {
@@ -52,6 +53,34 @@ describe('AdminService', () => {
     expect(stats.totalDiscountAmount).toBe(2.00);
     expect(stats.totalPurchaseAmount).toBe(18.00);
   });
+
+  test('should update nth order value', () => {
+    expect(store.nthOrder).toBe(5);
+    
+    const result = adminService.updateNthOrder(10);
+    
+    expect(result.previousValue).toBe(5);
+    expect(result.newValue).toBe(10);
+    expect(store.nthOrder).toBe(10);
+  });
+
+  test('should throw error for invalid nth order value', () => {
+    expect(() => {
+      adminService.updateNthOrder(0);
+    }).toThrow('nthOrder must be a positive integer');
+
+    expect(() => {
+      adminService.updateNthOrder(-1);
+    }).toThrow('nthOrder must be a positive integer');
+
+    expect(() => {
+      adminService.updateNthOrder(5.5);
+    }).toThrow('nthOrder must be a positive integer');
+  });
+
+  test('should get current nth order value', () => {
+    store.nthOrder = 7;
+    const nthOrder = adminService.getNthOrder();
+    expect(nthOrder).toBe(7);
+  });
 });
-
-

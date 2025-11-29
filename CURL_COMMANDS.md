@@ -3,6 +3,7 @@
 ## Prerequisites
 - Server should be running: `npm start`
 - Install `jq` for pretty JSON output: `brew install jq` (macOS) or `apt-get install jq` (Linux)
+- Admin API Key: `admin-secret-key-12345` (default, can be changed via `ADMIN_API_KEY` environment variable)
 
 ## Quick Test Script
 Run the complete test suite:
@@ -55,17 +56,36 @@ curl -X POST http://localhost:3000/api/checkout \
 
 ### 6. Admin - Generate Discount Code
 ```bash
-curl -X POST http://localhost:3000/api/admin/discount/generate
+curl -X POST http://localhost:3000/api/admin/discount/generate \
+  -H "x-api-key: admin-secret-key-12345"
 ```
 
 Note: This will only work if:
 - Order count is divisible by 5 (nth order)
 - No available discount code exists
+- Valid admin API key is provided
 
 ### 7. Admin - Get Statistics
 ```bash
-curl -X GET http://localhost:3000/api/admin/statistics
+curl -X GET http://localhost:3000/api/admin/statistics \
+  -H "x-api-key: admin-secret-key-12345"
 ```
+
+### 8. Admin - Get Current Nth Order Value
+```bash
+curl -X GET http://localhost:3000/api/admin/nth-order \
+  -H "x-api-key: admin-secret-key-12345"
+```
+
+### 9. Admin - Update Nth Order Value
+```bash
+curl -X PUT http://localhost:3000/api/admin/nth-order \
+  -H "Content-Type: application/json" \
+  -H "x-api-key: admin-secret-key-12345" \
+  -d '{"nthOrder": 10}'
+```
+
+**Note:** All admin endpoints require authentication via `x-api-key` header.
 
 ## Test Scenarios
 

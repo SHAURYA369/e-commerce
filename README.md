@@ -108,9 +108,13 @@ Response:
 
 ### Admin APIs
 
+**Note:** All admin endpoints require authentication via `x-api-key` header.
+Default API key: `admin-secret-key-12345` (can be changed via `ADMIN_API_KEY` environment variable)
+
 #### Generate Discount Code
 ```
 POST /api/admin/discount/generate
+Headers: x-api-key: admin-secret-key-12345
 ```
 
 Response:
@@ -128,7 +132,45 @@ Note: Discount codes are automatically generated when every nth order (5th, 10th
 #### Get Statistics
 ```
 GET /api/admin/statistics
+Headers: x-api-key: admin-secret-key-12345
 ```
+
+#### Get Nth Order Value
+```
+GET /api/admin/nth-order
+Headers: x-api-key: admin-secret-key-12345
+```
+
+Response:
+```json
+{
+  "nthOrder": 5
+}
+```
+
+#### Update Nth Order Value
+```
+PUT /api/admin/nth-order
+Headers: 
+  x-api-key: admin-secret-key-12345
+  Content-Type: application/json
+
+Body:
+{
+  "nthOrder": 10
+}
+```
+
+Response:
+```json
+{
+  "message": "Nth order value updated successfully",
+  "previousValue": 5,
+  "newValue": 10
+}
+```
+
+This allows admins to change how frequently discount codes are generated (e.g., every 10th order instead of every 5th order).
 
 Response:
 ```json
