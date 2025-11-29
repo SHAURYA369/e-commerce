@@ -2,16 +2,23 @@ const store = require('../store');
 const DiscountCode = require('../models/DiscountCode');
 
 class DiscountService {
+  generateDiscountCodeAutomatically() {
+    const code = this.generateCode();
+    const discountCode = new DiscountCode(code);
+    store.addDiscountCode(discountCode);
+    return discountCode;
+  }
+
   generateDiscountCode() {
     if (!store.shouldGenerateDiscountCode()) {
       throw new Error(`Discount code can only be generated every ${store.nthOrder} orders`);
     }
 
-    const code = this.generateCode();
-    const discountCode = new DiscountCode(code);
-    store.addDiscountCode(discountCode);
+    if (store.getAvailableDiscountCode()) {
+      throw new Error('A discount code is already available');
+    }
 
-    return discountCode;
+    return this.generateDiscountCodeAutomatically();
   }
 
   generateCode() {
@@ -25,4 +32,5 @@ class DiscountService {
 }
 
 module.exports = new DiscountService();
+
 

@@ -123,7 +123,7 @@ Response:
 }
 ```
 
-Note: Discount code can only be generated every 5 orders (nth order).
+Note: Discount codes are automatically generated when every nth order (5th, 10th, 15th, etc.) is placed. The admin API can manually generate a code only if no available code exists and the nth order condition is met.
 
 #### Get Statistics
 ```
@@ -178,4 +178,5 @@ src/
 - Node.js
 - Express.js
 - Jest (testing)
+
 

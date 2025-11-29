@@ -33,9 +33,6 @@ describe('AdminService', () => {
       checkoutService.checkout(`user${i}`);
     }
     
-    const discountService = require('../discountService');
-    discountService.generateDiscountCode();
-    
     const stats = adminService.getStatistics();
     
     expect(stats.discountCodes).toHaveLength(1);
@@ -56,4 +53,5 @@ describe('AdminService', () => {
     expect(stats.totalPurchaseAmount).toBe(18.00);
   });
 });
+
 

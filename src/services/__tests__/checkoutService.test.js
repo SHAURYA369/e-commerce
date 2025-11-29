@@ -60,5 +60,35 @@ describe('CheckoutService', () => {
       checkoutService.checkout('user1', 'TESTCODE');
     }).toThrow('Discount code has already been used');
   });
+
+  test('should automatically generate discount code on nth order', () => {
+    for (let i = 0; i < 4; i++) {
+      cartService.addItemToCart(`user${i}`, 'product1', 1, 10.00);
+      checkoutService.checkout(`user${i}`);
+    }
+    
+    expect(store.discountCodes).toHaveLength(0);
+    
+    cartService.addItemToCart('user4', 'product1', 1, 10.00);
+    checkoutService.checkout('user4');
+    
+    expect(store.discountCodes).toHaveLength(1);
+    expect(store.discountCodes[0].status).toBe('AVAILABLE');
+  });
+
+  test('should not generate duplicate code if one already exists', () => {
+    for (let i = 0; i < 5; i++) {
+      cartService.addItemToCart(`user${i}`, 'product1', 1, 10.00);
+      checkoutService.checkout(`user${i}`);
+    }
+    
+    const codeCount = store.discountCodes.length;
+    
+    cartService.addItemToCart('user5', 'product1', 1, 10.00);
+    checkoutService.checkout('user5');
+    
+    expect(store.discountCodes.length).toBe(codeCount);
+  });
 });
+
 

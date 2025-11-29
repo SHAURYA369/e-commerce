@@ -1,5 +1,6 @@
 const store = require('../store');
 const Order = require('../models/Order');
+const discountService = require('./discountService');
 
 class CheckoutService {
   checkout(userId, discountCode = null) {
@@ -39,6 +40,11 @@ class CheckoutService {
     );
 
     store.addOrder(order);
+    
+    if (store.shouldGenerateDiscountCode() && !store.getAvailableDiscountCode()) {
+      discountService.generateDiscountCodeAutomatically();
+    }
+    
     store.clearCart(userId);
 
     return order;
@@ -46,4 +52,5 @@ class CheckoutService {
 }
 
 module.exports = new CheckoutService();
+
 
