@@ -1,8 +1,8 @@
 const http = require('http');
 
 const BASE_URL = 'http://localhost:3000';
-const TOTAL_ORDERS = 1000;
-const EXPECTED_DISCOUNT_CODES = 200;
+const TOTAL_ORDERS = 100000;
+const EXPECTED_DISCOUNT_CODES = 20000;
 
 function makeRequest(options, data = null) {
   return new Promise((resolve, reject) => {
@@ -74,6 +74,9 @@ async function getStatistics() {
     port: 3000,
     path: '/api/admin/statistics',
     method: 'GET',
+    headers: {
+      'x-api-key': 'admin-secret-key-12345',
+    },
   };
 
   return makeRequest(options);
@@ -89,7 +92,7 @@ async function runLoadTest() {
   let successCount = 0;
   let failedCount = 0;
 
-  const concurrency = 10;
+  const concurrency = 50;
   let currentIndex = 0;
 
   async function processBatch() {
