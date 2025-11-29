@@ -76,20 +76,34 @@ describe('CheckoutService', () => {
     expect(store.discountCodes[0].status).toBe('AVAILABLE');
   });
 
-  test('should generate new code on every nth order', () => {
+  test('should generate new code on every nth order only if no code exists', () => {
     for (let i = 0; i < 5; i++) {
       cartService.addItemToCart(`user${i}`, 'product1', 1, 10.00);
       checkoutService.checkout(`user${i}`);
     }
     
     expect(store.discountCodes.length).toBe(1);
+    expect(store.discountCodes[0].status).toBe('AVAILABLE');
     
     for (let i = 5; i < 10; i++) {
       cartService.addItemToCart(`user${i}`, 'product1', 1, 10.00);
       checkoutService.checkout(`user${i}`);
     }
     
+    expect(store.discountCodes.length).toBe(1);
+    
+    const DiscountCode = require('../../models/DiscountCode');
+    const code1 = store.discountCodes[0];
+    cartService.addItemToCart('user10', 'product1', 1, 10.00);
+    checkoutService.checkout('user10', code1.code);
+    
+    for (let i = 11; i < 15; i++) {
+      cartService.addItemToCart(`user${i}`, 'product1', 1, 10.00);
+      checkoutService.checkout(`user${i}`);
+    }
+    
     expect(store.discountCodes.length).toBe(2);
+    expect(store.discountCodes[1].status).toBe('AVAILABLE');
   });
 });
 
