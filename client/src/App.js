@@ -4,6 +4,7 @@ import './App.css';
 import Cart from './components/Cart';
 import Checkout from './components/Checkout';
 import Admin from './components/Admin';
+import DebugInfo from './components/DebugInfo';
 
 function Header() {
   const location = useLocation();
@@ -43,6 +44,7 @@ function App() {
             <Route path="/admin" element={<Admin />} />
           </Routes>
         </main>
+        {process.env.NODE_ENV === 'development' && <DebugInfo />}
       </div>
     </Router>
   );
