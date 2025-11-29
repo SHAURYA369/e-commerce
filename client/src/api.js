@@ -39,6 +39,17 @@ export const checkoutAPI = {
   },
 };
 
+export const discountAPI = {
+  getAvailable: async () => {
+    const response = await fetch(`${API_BASE_URL}/discount/available`);
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to fetch discount code');
+    }
+    return response.json();
+  },
+};
+
 export const adminAPI = {
   getStatistics: async (apiKey) => {
     const response = await fetch(`${API_BASE_URL}/admin/statistics`, {
