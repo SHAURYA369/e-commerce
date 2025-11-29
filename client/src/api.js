@@ -7,11 +7,19 @@ export const cartAPI = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, productId, quantity, price }),
     });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to add item');
+    }
     return response.json();
   },
 
   getCart: async (userId) => {
     const response = await fetch(`${API_BASE_URL}/cart?userId=${userId}`);
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Failed to fetch cart');
+    }
     return response.json();
   },
 };
@@ -23,6 +31,10 @@ export const checkoutAPI = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, discountCode }),
     });
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error || 'Checkout failed');
+    }
     return response.json();
   },
 };

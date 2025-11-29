@@ -11,10 +11,15 @@
     "client": "cd client && npm start",
     "client:build": "cd client && npm run build"
   },
-  "keywords": ["ecommerce", "cart", "checkout"],
+  "keywords": [
+    "ecommerce",
+    "cart",
+    "checkout"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.18.2"
   },
   "devDependencies": {
@@ -23,4 +28,3 @@
     "supertest": "^6.3.3"
   }
 }
-

@@ -19,7 +19,8 @@ function Cart({ userId }) {
       const data = await cartAPI.getCart(userId);
       setCart(data);
     } catch (error) {
-      setMessage('Error loading cart');
+      console.error('Error loading cart:', error);
+      setMessage('Error loading cart: ' + (error.message || 'Unknown error'));
     }
   };
 
